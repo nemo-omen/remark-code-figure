@@ -83,6 +83,8 @@ async function mdHTML() {
       writeSync({path: './html-test.html', value: String(await file)});
     });
 }
+
+mdHTML();
 ```
 
 Which will give you:
@@ -106,10 +108,11 @@ Which will give you:
 Options are passed to `codeFigure` as an object. By default, that object looks like this:
 
 ```js
+{
  className: 'code-figure', 
  captionOptions: {
-   disable: true | false, 
-   position: 'after' | 'before', 
+   disable: false, 
+   position: 'after', 
    className: 'code-caption'
  }
 }
@@ -124,9 +127,7 @@ Specifies the class name of the `figure` element. Defaults to `code-figure`.
 }
 ```
 
-### `options.captionOptions`
-
-#### `options.captionOptions.disable`
+### `options.captionOptions.disable`
 Specifies whether to disable the `figcaption` element.
 ```js
 {
@@ -135,7 +136,7 @@ Specifies whether to disable the `figcaption` element.
 }
 ```
 
-#### `options.captionOptions.position`
+### `options.captionOptions.position`
 Specifies the position of the `figcaption` element. Can be either `"before"` or `"after"`.
 ```js
 {
@@ -144,7 +145,7 @@ Specifies the position of the `figcaption` element. Can be either `"before"` or 
 }
 ```
 
-#### `options.captionOptions.className`
+### `options.captionOptions.className`
 Specifies the class name for the `figcaption` element. Defaults to `code-caption`.
 ```js
 {
