@@ -19,31 +19,14 @@
   "author": "Jeff Caldwell",
   "license": "MIT",
   "dependencies": {
-    "hast-util-parse-selector": "^3.1.0",
-    "hast-util-select": "^5.0.1",
-    "rehype-parse": "^8.0.3",
-    "rehype-remark": "^9.0.0",
-    "remark-html": "^15.0.0",
-    "remark-stringify": "^10.0.0",
     "unist-util-visit": "^4.1.0"
   },
   "bugs": {
-    "url": "https://github.com/nemo-omen/rehype-code-figure/issues"
+    "url": "https://github.com/nemo-omen/remark-code-figure/issues"
   },
-  "homepage": "https://github.com/nemo-omen/rehype-code-figure",
+  "homepage": "https://github.com/nemo-omen/remark-code-figure",
   "repository": {
     "type": "git",
-    "url": "https://github.com/nemo-omen/rehype-code-figure.git"
-  },
-  "devDependencies": {
-    "rehype": "^12.0.0",
-    "rehype-document": "^6.0.0",
-    "rehype-stringify": "^9.0.2",
-    "remark": "^14.0.1",
-    "remark-parse": "^10.0.0",
-    "remark-rehype": "^10.0.0",
-    "tap": "^15.0.10",
-    "unified": "^10.1.0",
-    "vfile-reporter": "^7.0.2"
+    "url": "https://github.com/nemo-omen/remark-code-figure.git"
   }
 }
