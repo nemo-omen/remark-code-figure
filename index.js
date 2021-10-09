@@ -41,16 +41,18 @@ options = {
 
       const preElement = {
         type: 'html',
-        value: `<pre><code class="language-${node.lang}">${node.value}</code></pre>`
+        value: `<pre>
+  <code class="language-${node.lang}">
+
+${node.value}
+
+  </code>
+</pre>`
       };
 
       const figElement = {
         type: 'html',
-        value: `<figure class="${className ? className : 'code-figure'}">
-${captionOptions.position === 'before' ? captionElement.value : ''}
-${preElement.value}
-${captionOptions.position === 'after' ? captionElement.value : ''}
-</figure>`
+        value: `<figure class="${className ? className : 'code-figure'}">${captionOptions.position === 'before' ? captionElement.value : ''}${preElement.value}${captionOptions.position === 'after' ? captionElement.value : ''}\n</figure>`
     };
     parent.children[index] = figElement;
   });
