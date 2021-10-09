@@ -35,7 +35,7 @@ options = {
       if(captionData) {
         captionElement = {
           type: 'html',
-          value: `<figcaption class=${captionOptions.className ? captionOptions.className : 'code-caption'}>${captionData}</figcaption>`
+          value: `<figcaption class="${captionOptions.className ? captionOptions.className : 'code-caption'}">${captionData}</figcaption>`
         };
       }
 
@@ -46,7 +46,7 @@ options = {
 
       const figElement = {
         type: 'html',
-        value: `<figure class=${className ? className : 'code-figure'}>
+        value: `<figure class="${className ? className : 'code-figure'}">
 ${captionOptions.position === 'before' ? captionElement.value : ''}
 ${preElement.value}
 ${captionOptions.position === 'after' ? captionElement.value : ''}
