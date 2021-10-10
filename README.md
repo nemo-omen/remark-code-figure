@@ -103,6 +103,31 @@ Which will give you:
 </figure>
 ```
 
+## Syntax Highlighting
+At the moment, this plugin keeps remark plugins like [remark-prism](https://github.com/sergioramos/remark-prism) from working.
+
+You can get around that by using a rehype plugin like [rehype-prism](https://github.com/mapbox/rehype-prism) instead:
+
+```js
+import prism from '@mapbox/rehype-prism';
+
+async function mdPrism() {
+  return await unified()
+    .use(remarkParse)
+    .use(codeFigure)
+    .use(remarkRehype, {allowDangerousHtml: true})
+    .use(rehypeRaw)
+    .use(prism)
+    .use(rehypeDocument)
+    .use(rehypeStringify)
+    .process(readSync('./test.md'))
+    .then(async (file) => {
+      console.error(report(file));
+      writeSync({path: './prism-test.html', value: String(await file)});
+    })
+}
+```
+
 ## Options
 
 Options are passed to `codeFigure` as an object. By default, that object looks like this:
