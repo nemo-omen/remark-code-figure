@@ -5,7 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "dev": "nodemon test.js"
   },
   "keywords": [
@@ -28,5 +28,16 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/nemo-omen/remark-code-figure.git"
+  },
+  "devDependencies": {
+    "jest": "^27.2.5",
+    "rehype-raw": "^6.1.0",
+    "rehype-stringify": "^9.0.2",
+    "remark": "^14.0.1",
+    "remark-html": "^15.0.0",
+    "remark-parse": "^10.0.0",
+    "remark-rehype": "^10.0.0",
+    "remark-stringify": "^10.0.0",
+    "unified": "^10.1.0"
   }
 }
