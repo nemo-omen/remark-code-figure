@@ -104,9 +104,9 @@ Which will give you:
 ```
 
 ## Syntax Highlighting
-At the moment, this plugin keeps remark plugins like [remark-prism](https://github.com/sergioramos/remark-prism) from working.
+At the moment, this plugin will work with [remark-shiki](https://github.com/stefanprobst/remark-shiki), but will not work with [remark-prism](https://github.com/sergioramos/remark-prism).
 
-You can get around that by using a rehype plugin like [rehype-prism](https://github.com/mapbox/rehype-prism) instead:
+This plugin will work with [@mapbox/rehype-prism](https://github.com/mapbox/rehype-prism) though, you'll just need to call things in the correct order:
 
 ```js
 import prism from '@mapbox/rehype-prism';
@@ -126,6 +126,32 @@ async function mdPrism() {
       writeSync({path: './prism-test.html', value: String(await file)});
     })
 }
+```
+
+If you want to highlight with [remark-shiki](https://github.com/stefanprobst/remark-shiki), you need to install [shiki](https://github.com/shikijs/shiki) as a separate dependency.
+
+You'll also need to call the `shiki.getHighlighter` function:
+
+```js
+async function mdShiki() {
+  const highlighter = await shiki.getHighlighter({theme: 'nord'});
+
+  return unified()
+    .use(remarkParse)
+    .use(remarkShiki, {highlighter})
+    .use(codeFigure)
+    .use(remarkRehype, {allowDangerousHtml: true})
+    .use(rehypeRaw)
+    .use(rehypeDocument)
+    .use(rehypeStringify)
+    .process(readSync('./test.md'))
+    .then(async(file) => {
+      console.error(report(file));
+      writeSync({path: './shiki-test.html', value: String(await file)});
+    });
+}
+
+mdShiki();
 ```
 
 ## Options
