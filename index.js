@@ -26,21 +26,28 @@ options = {
   const { className, captionOptions } = options;
   
   return (tree) => {
+    visit(tree, 'element', (node, index, parent) => {
+      if(node.tagName === 'pre') {
+        wrapHastNode(node, index, parent,options);
+      }
+    });
 
     visit(tree, 'html', (node, index, parent) => {
       if(node.lang) {
-        wrapHTMLNode(node, index, parent);
-        // console.log(node);
+        wrapHTMLNode(node, index, parent,options);
       }
     });
 
     visit(tree, 'code', (node, index, parent) => {
-      wrapCodeNode(node, index, parent);
+      wrapCodeNode(node, index, parent,options);
     }
+
+
 );
 
 
-function wrapHTMLNode(node, index, parent) {
+function wrapHTMLNode(node, index, parent, options) {
+  const { className, captionOptions } = options;
   const captionData = node?.meta;
   let captionElement = null;
 
@@ -58,7 +65,8 @@ function wrapHTMLNode(node, index, parent) {
   parent.children[index] = figElement;
 }
 
-function wrapCodeNode(node, index, parent) {
+function wrapCodeNode(node, index, parent, options) {
+  const { className, captionOptions } = options;
   const captionData = node?.meta;
     let captionElement = null;
 
@@ -87,4 +95,41 @@ ${node.value}
     parent.children[index] = figElement;
   };
   }
+}
+
+function wrapHastNode(node, index, parent, options) {
+  const { className, captionOptions } = options;
+  const captionData = null;
+  // let captionElement = null;
+  visit(node, 'element', (cNode, index, parent) => {
+    if(cNode.tagName === 'code' && cNode.data.meta) {
+      console.log(cNode.data.meta);
+    }
+  });
+
+  const captionElement = {
+    type: 'element',
+    tagName: 'figcaption',
+    properties: {
+      className: captionOptions.className ? captionOptions.className : 'code-caption',
+    },
+    children: [
+      {
+        type: 'text',
+        value: captionData ? captionData : ''
+      }
+    ]
+  }
+
+  const figElement = {
+    type: 'element',
+    tagName: 'figure',
+    properties: {
+      className: className ? className : 'code-figure'
+    },
+    children: captionOptions.position === 'before' ? [captionElement, node]
+      : captionOptions.disable ? [node]
+      : [node, captionElement]
+  }
+  parent.children[index] = figElement;
 }
