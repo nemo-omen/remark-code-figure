@@ -12,9 +12,6 @@ const defaults = {
 }
 
 export default function codeFigure(options = defaults) {
-
-  const { className, captionOptions } = options;
-  
   return (tree) => {
 
     visit(tree, 'code', (node, index, parent) => {
@@ -85,7 +82,7 @@ function wrapHTMLNode(node, index, parent, options) {
   const { className, captionOptions } = options;
   const captionData = node.meta ? node.meta : null;
 
-  captionElement = {
+  const captionElement = {
     type: 'html',
     value: `<figcaption class="${captionOptions.className ? captionOptions.className : 'code-caption'}">${captionData}</figcaption>`
   };
@@ -136,14 +133,12 @@ function makeCaption(captionData, className) {
 }
 
 function makeFigure(children, className) {
-  return {
-    type: 'element',
+  return u('element', {
     tagName: 'figure',
     properties: {
       className: className
-    },
-    children: children
-  }
+    }
+  }, children);
 }
 
 function makeHTML(element) {
