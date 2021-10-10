@@ -61,6 +61,7 @@ function wrapHastNode(node, index, parent, options) {
   const { className, captionOptions } = options;
   let captionData = null;
   const captionClass = captionOptions.className ? captionOptions.className : 'code-caption';
+  const figClass = className ? className : 'code-figure';
 
   visit(node, 'element', (cNode, index, parent) => {
     if(cNode.tagName === 'code' && cNode.data.meta) {
@@ -68,18 +69,15 @@ function wrapHastNode(node, index, parent, options) {
     }
   });
 
-  const captionElement = makeCaption(captionData ? captionData : null, captionClass);
+  const captionElement = makeCaption(captionData, captionClass);
 
-  const figElement = {
-    type: 'element',
-    tagName: 'figure',
-    properties: {
-      className: className ? className : 'code-figure'
-    },
-    children: captionOptions.position === 'before' ? [captionElement, node]
-      : captionOptions.disable ? [node]
-      : [node, captionElement]
-  }
+  const figChildren = captionOptions.position === 'before' ? [captionElement, node] 
+  : captionOptions.disable ? [node]
+  : [node, captionElement]
+
+  const figElement = makeFigure(figChildren, figClass);
+
+  const html = makeHTML(figElement);
   parent.children[index] = figElement;
 }
 
