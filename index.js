@@ -91,6 +91,10 @@ function wrapHTMLNode(node, index, parent, options) {
     type: 'html',
     value: `<figure class="${className ? className : 'code-figure'}">${captionOptions.position === 'before' ? captionElement.value : ''}${node.value}${captionOptions.position === 'after' ? captionElement.value : ''}\n</figure>`
   };
+
+  // const sanitized = toHtml(sanitize(figElement.value));
+
+  // parent.children[index] = sanitized;
   parent.children[index] = figElement;
 }
 
