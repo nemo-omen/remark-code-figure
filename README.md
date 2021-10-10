@@ -69,7 +69,7 @@ This will write `marked-test.md` to the file system for us. That file will look 
 
 ### To HTML
 
-You can also process markdown input into partial html output. Make sure to use `{sanitize: false}` in the `remarkHtml` options or the `figure` element and its children will be stripped from the document.
+You can also process markdown input into partial html output. Make sure to use `{sanitize: false}` in the `remarkHtml` options or the `figure` element and its children will be stripped from the document. After that, though, you'll want to use [rehype-sanitize](https://github.com/rehypejs/rehype-sanitize) to protect yourself from [xss attacks](https://en.wikipedia.org/wiki/Cross-site_scripting).
 
 ```js
 async function mdHTML() {
@@ -77,6 +77,7 @@ async function mdHTML() {
     .use(remarkParse) // but leave this line out if you do
     .use(codeFigure)
     .use(remarkHtml, {sanitize: false}) // important!
+    .use(rehypeSanitize)
     .process(readSync('./test.md'))
     .then(async (file) => {
       console.error(report(file));
@@ -106,26 +107,30 @@ Which will give you:
 ## Syntax Highlighting
 At the moment, this plugin will work with [remark-shiki](https://github.com/stefanprobst/remark-shiki), but will not work with [remark-prism](https://github.com/sergioramos/remark-prism).
 
-This plugin will work with [@mapbox/rehype-prism](https://github.com/mapbox/rehype-prism) though, you'll just need to call things in the correct order:
+This plugin will work with [@mapbox/rehype-prism](https://github.com/mapbox/rehype-prism) though, you'll just need to call things in the correct order, it's also recommended to use [rehype-sanitize](https://github.com/rehypejs/rehype-sanitize) to help ensure your final output is safe from [XSS attacks](https://en.wikipedia.org/wiki/Cross-site_scripting):
 
 ```js
 import prism from '@mapbox/rehype-prism';
 
 async function mdPrism() {
-  return await unified()
-    .use(remarkParse)
-    .use(codeFigure)
+  return await remark()
     .use(remarkRehype, {allowDangerousHtml: true})
-    .use(rehypeRaw)
     .use(prism)
+    .use(codeFigure)
+    .use(rehypeRaw)
+    .use(rehypeSanitize)
     .use(rehypeDocument)
+    .use(rehypeFormat) // make your html output look nice!
     .use(rehypeStringify)
     .process(readSync('./test.md'))
     .then(async (file) => {
       console.error(report(file));
-      writeSync({path: './prism-test.html', value: String(await file)});
+      writeSync({path: './mdPrism.html', value: String(await file)});
     })
-}
+    
+  }
+
+mdPrism();
 ```
 
 If you want to highlight with [remark-shiki](https://github.com/stefanprobst/remark-shiki), you need to install [shiki](https://github.com/shikijs/shiki) as a separate dependency.
@@ -136,18 +141,19 @@ You'll also need to call the `shiki.getHighlighter` function:
 async function mdShiki() {
   const highlighter = await shiki.getHighlighter({theme: 'nord'});
 
-  return unified()
-    .use(remarkParse)
+  return remark()
     .use(remarkShiki, {highlighter})
     .use(codeFigure)
     .use(remarkRehype, {allowDangerousHtml: true})
     .use(rehypeRaw)
+    .use(rehypeSanitize)
     .use(rehypeDocument)
+    .use(rehypeFormat)
     .use(rehypeStringify)
     .process(readSync('./test.md'))
     .then(async(file) => {
       console.error(report(file));
-      writeSync({path: './shiki-test.html', value: String(await file)});
+      writeSync({path: './mdShiki.html', value: String(await file)});
     });
 }
 
